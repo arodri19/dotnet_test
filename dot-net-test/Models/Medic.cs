@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,7 +8,9 @@ namespace dotnet_test.Models
 {
     public class Medic
     {
-        public int MedicID { get; set; }
+        [Key]
+        public int ID { get; set; }
+
         public string Name { get; set; }
         public string Cpf { get; set; }
         public byte[] PasswordHash { get; set; }
@@ -15,7 +18,7 @@ namespace dotnet_test.Models
         public DateTime LastAccess { get; set; }
 
         public string Crm { get; set; }
-        public new TypeSpeciality TypeSpeciality { get; set; }
+        public TypeSpecialityEnum TypeSpeciality { get; set; }
 
         public ICollection<ScheduleTreatment> ScheduleTreatment { get; set; }
 

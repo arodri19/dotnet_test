@@ -6,17 +6,10 @@ using System.Threading.Tasks;
 
 namespace dotnet_test.Models
 {
-
-    public class TypeUser
+    public enum TypeUserEnum
     {
-        [Key]
-        public TypeUserEnum ETypeUser { get; set; }
-        public ICollection<SystemUser> User { get; set; }
-
-        public enum TypeUserEnum
-        {
-            Administrador = 0,
-            Outros = 1
-        }
+        Administrador = 0,
+        Outros = 1
     }
+
 }

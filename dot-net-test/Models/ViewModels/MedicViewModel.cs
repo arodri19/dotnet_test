@@ -4,19 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace dotnet_test.Models
+namespace dotnet_test.Models.ViewModels
 {
-    public class Patient
+    public class MedicViewModel
     {
         [Key]
         public int ID { get; set; }
 
         public string Name { get; set; }
         public string Cpf { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
-        public DateTime LastAccess { get; set; }
-
-        public ICollection<ScheduleTreatment> ScheduleTreatment { get; set; }
+        [Required(ErrorMessage ="O Preenchimento é necessário")]
+        public string Password { get; set; }
+        public string Crm { get; set; }
+        public TypeSpecialityEnum TypeSpeciality { get; set; }
     }
 }

@@ -6,16 +6,9 @@ using System.Threading.Tasks;
 
 namespace dotnet_test.Models
 {
-    public class TypeSpeciality
+    public enum TypeSpecialityEnum
     {
-        [Key]
-        public TypeSpecialityEnum ETypeUser { get; set; }
-        public ICollection<Medic> Medic { get; set; }
-
-        public enum TypeSpecialityEnum
-        {
-            Geral = 0,
-            Pediatria = 1
-        }
+        Geral = 0,
+        Pediatria = 1
     }
 }
