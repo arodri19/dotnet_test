@@ -11,6 +11,6 @@ namespace dotnet_test.Models
         public string Name { get; set; }
         public string Obs { get; set; }
 
-
+        public ICollection<Medicines> Medicines { get; set; }
     }
 }

@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 
 namespace dotnet_test.Models
 {
-    public class Users
+    public class SystemUser
     {
-        public int UsersID { get; set; }
+        public int SystemUserID { get; set; }
         public string Name { get; set; }
         public string Cpf { get; set; }
-        public string Password { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
         public DateTime LastAccess { get; set; }
-        public string crm { get; set; }
 
-        public TypeUsers TypeUsers { get; set; }
+        public TypeUser TypeUser { get; set; }
     }
 }

@@ -40,8 +40,7 @@ namespace dot_net_test
                         Description = "API Rest ASP.NET Core - Consultório",
                         Contact = new Contact
                         {
-                            Name = "André Rodrigues",
-                            Url = "https://github.com/renatogroffe"
+                            Name = "André Rodrigues"
                         }
                     });
             });
