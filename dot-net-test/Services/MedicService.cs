@@ -11,6 +11,7 @@ namespace dotnet_test.Services
     {
         Medic Authenticate(string username, string password);
         IEnumerable<Medic> GetAll();
+        Medic GetById(int id);
         List<Medic> GetByValues(string name, string cpf, string crm);
         Medic Create(Medic medic, string password);
         void Update(Medic medic, string password = null);
@@ -79,6 +80,11 @@ namespace dotnet_test.Services
         public IEnumerable<Medic> GetAll()
         {
             return _context.Medic;
+        }
+
+        public Medic GetById(int id)
+        {
+            return _context.Medic.Find(id);
         }
 
         public List<Medic> GetByValues(string name, string cpf, string crm)
