@@ -13,8 +13,8 @@ namespace dotnet_test.Services
         IEnumerable<Medic> GetAll();
         Medic GetById(int id);
         List<Medic> GetByValues(string name, string cpf, string crm);
-        Medic Create(Medic medic, string password);
-        void Update(Medic medic, string password = null);
+        Medic Create(Medic user, string password);
+        void Update(Medic user, string password = null);
         void Delete(int id);
     }
 
@@ -45,34 +45,34 @@ namespace dotnet_test.Services
             return user;
         }
 
-        public Medic Create(Medic medic, string password)
+        public Medic Create(Medic user, string password)
         {
 
             // validation
             if (string.IsNullOrWhiteSpace(password))
                 throw new AppException("Preencha a senha");
 
-            if (_context.Medic.Any(x => x.Cpf == medic.Cpf))
-                throw new AppException("Usuário \"" + medic.Cpf + "\" já registrado no sistema");
+            if (_context.Medic.Any(x => x.Cpf == user.Cpf))
+                throw new AppException("Usuário \"" + user.Cpf + "\" já registrado no sistema");
 
             byte[] passwordHash, passwordSalt;
             _passwordTasks.CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-            medic.PasswordHash = passwordHash;
-            medic.PasswordSalt = passwordSalt;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
 
-            _context.Medic.Add(medic);
+            _context.Medic.Add(user);
             _context.SaveChanges();
 
-            return medic;
+            return user;
         }
 
         public void Delete(int id)
         {
-            var medic = _context.Medic.Find(id);
-            if (medic != null)
+            var user = _context.Medic.Find(id);
+            if (user != null)
             {
-                _context.Medic.Remove(medic);
+                _context.Medic.Remove(user);
                 _context.SaveChanges();
             }
         }
@@ -94,25 +94,25 @@ namespace dotnet_test.Services
                    select c).ToList<Medic>();
         }
 
-        public void Update(Medic medicVM, string password = null)
+        public void Update(Medic userVM, string password = null)
         {
-            var medic = _context.Medic.Find(medicVM.ID);
+            var user = _context.Medic.Find(userVM.ID);
 
-            if (medic == null)
+            if (user == null)
                 throw new AppException("Usuário não encontrado");
 
-            if (medicVM.Cpf != medic.Cpf)
+            if (userVM.Cpf != user.Cpf)
             {
                 // username has changed so check if the new username is already taken
-                if (_context.Medic.Any(x => x.Cpf == medicVM.Cpf))
-                    throw new AppException("Usuário \"" + medic.Cpf + "\" já registrado no sistema");
+                if (_context.Medic.Any(x => x.Cpf == userVM.Cpf))
+                    throw new AppException("Usuário \"" + user.Cpf + "\" já registrado no sistema");
             }
 
             // update user properties
-            medic.Cpf = medicVM.Cpf;
-            medic.Crm = medicVM.Crm;
-            medic.Name = medicVM.Name;
-            medic.TypeSpeciality = medicVM.TypeSpeciality;
+            user.Cpf = userVM.Cpf;
+            user.Crm = userVM.Crm;
+            user.Name = userVM.Name;
+            user.TypeSpeciality = userVM.TypeSpeciality;
 
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(password))
@@ -120,11 +120,11 @@ namespace dotnet_test.Services
                 byte[] passwordHash, passwordSalt;
                 _passwordTasks.CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-                medic.PasswordHash = passwordHash;
-                medic.PasswordSalt = passwordSalt;
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
             }
 
-            _context.Medic.Update(medic);
+            _context.Medic.Update(user);
             _context.SaveChanges();
         }
         

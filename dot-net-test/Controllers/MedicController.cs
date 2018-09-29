@@ -23,24 +23,24 @@ namespace dotnet_test.Controllers
     public class MedicController : ControllerBase
     {
 
-        private IMedicService _medicService;
+        private IMedicService _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
 
-        public MedicController(IMedicService medicService, IMapper mapper, IOptions<AppSettings> appSettings)
+        public MedicController(IMedicService userService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
-            _medicService = medicService;
+            _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
         }
 
         [AllowAnonymous]
         [HttpPost("medics/authenticate")]
-        public IActionResult Authenticate([FromBody]MedicViewModel medicVM)
+        public IActionResult Authenticate([FromBody]MedicViewModel userVM)
         {
-            var medic = _medicService.Authenticate(medicVM.Cpf, medicVM.Password);
+            var user = _userService.Authenticate(userVM.Cpf, userVM.Password);
 
-            if (medic == null)
+            if (user == null)
                 return BadRequest(new { errorMessage = "Senha ou Cpf incorretos" });
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -49,8 +49,8 @@ namespace dotnet_test.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, medic.ID.ToString()),
-                    new Claim(ClaimTypes.Role, medic.GetType().Name)
+                    new Claim(ClaimTypes.Name, user.ID.ToString()),
+                    new Claim(ClaimTypes.Role, user.GetType().Name)
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -61,23 +61,23 @@ namespace dotnet_test.Controllers
             // return basic user info (without password) and token to store client side
             return Ok(new
             {
-                Id = medic.ID,
-                Cpf = medic.Cpf,
-                Name = medic.Name,
-                Crm = medic.Crm,
+                Id = user.ID,
+                Cpf = user.Cpf,
+                Name = user.Name,
+                Crm = user.Crm,
                 Token = tokenString
             });
         }
 
         [AllowAnonymous]
         [HttpPost("medics")]
-        public ActionResult Post([FromBody] MedicViewModel medicVM)
+        public ActionResult Post([FromBody] MedicViewModel userVM)
         {
 
-            var medic = _mapper.Map<Medic>(medicVM);
+            var user = _mapper.Map<Medic>(userVM);
             try
             {
-                _medicService.Create(medic, medicVM.Password);
+                _userService.Create(user, userVM.Password);
                 return Ok();
             }
             catch (AppException ex)
@@ -90,35 +90,35 @@ namespace dotnet_test.Controllers
         [HttpGet("medics")]
         public ActionResult GetAll()
         {
-            var medics = _medicService.GetAll();
-            var viewMedic = _mapper.Map<IList<MedicViewModel>>(medics);
+            var users = _userService.GetAll();
+            var viewUser = _mapper.Map<IList<MedicViewModel>>(users);
             
 
-            return Ok(viewMedic);
+            return Ok(viewUser);
         }
 
         // GET api/values/5
         [HttpGet("medics/{name}/{cpf}/{crm}")]
         public ActionResult Get(string name, string cpf, string crm)
         {
-            var medic = _medicService.GetByValues(name, cpf, crm);
-            var viewMedic = _mapper.Map<IList<MedicViewModel>>(medic);
+            var user = _userService.GetByValues(name, cpf, crm);
+            var viewUser = _mapper.Map<IList<MedicViewModel>>(user);
 
-            return Ok(viewMedic);
+            return Ok(viewUser);
         }
 
         // PUT api/values/5
         [HttpPut("medics/{id}")]
-        public ActionResult Put(int id, [FromBody] MedicViewModel medicVM)
+        public ActionResult Put(int id, [FromBody] MedicViewModel userVM)
         {
             // map dto to entity and set id
-            var medic = _mapper.Map<Medic>(medicVM);
-            medic.ID = id;
+            var user = _mapper.Map<Medic>(userVM);
+            user.ID = id;
 
             try
             {
                 // save 
-                _medicService.Update(medic, medicVM.Password);
+                _userService.Update(user, userVM.Password);
                 return Ok();
             }
             catch (AppException ex)
@@ -132,7 +132,7 @@ namespace dotnet_test.Controllers
         [HttpDelete("medics/{id}")]
         public ActionResult Delete(int id)
         {
-            _medicService.Delete(id);
+            _userService.Delete(id);
             return Ok();
         }
     }

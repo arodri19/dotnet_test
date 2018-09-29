@@ -74,14 +74,29 @@ namespace dot_net_test
                 {
                     OnTokenValidated = context =>
                     {
-                        var medicService = context.HttpContext.RequestServices.GetRequiredService<IMedicService>();
-                        var medicId = int.Parse(context.Principal.Identity.Name);
-                        var medic = medicService.GetById(medicId);
-                        if (medic == null)
+
+                        if (context.Principal.Claims.ToList()[1].Value == "Medic")
                         {
-                            // return unauthorized if user no longer exists
-                            context.Fail("Unauthorized");
+                            var medicService = context.HttpContext.RequestServices.GetRequiredService<IMedicService>();
+                            var userId = int.Parse(context.Principal.Identity.Name);
+                            var user = medicService.GetById(userId);
+                            if (user == null)
+                            {
+                                // return unauthorized if user no longer exists
+                                context.Fail("Unauthorized");
+                            }
+                        } else if (context.Principal.Claims.ToList()[1].Value == "Patient")
+                        {
+                            var patientService = context.HttpContext.RequestServices.GetRequiredService<IPatientService>();
+                            var userId = int.Parse(context.Principal.Identity.Name);
+                            var patient = patientService.GetById(userId);
+                            if (patient == null)
+                            {
+                                // return unauthorized if user no longer exists
+                                context.Fail("Unauthorized");
+                            }
                         }
+
                         return Task.CompletedTask;
                     }
                 };
@@ -97,6 +112,7 @@ namespace dot_net_test
             });
 
             services.AddScoped<IMedicService, MedicService>();
+            services.AddScoped<IPatientService, PatientService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

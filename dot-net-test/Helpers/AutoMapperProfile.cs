@@ -14,6 +14,9 @@ namespace dotnet_test.Helpers
         {
             CreateMap<Medic, MedicViewModel>();
             CreateMap<MedicViewModel, Medic>();
+
+            CreateMap<Patient, PatientViewModel>();
+            CreateMap<PatientViewModel, Patient>();
         }
     }
 }
