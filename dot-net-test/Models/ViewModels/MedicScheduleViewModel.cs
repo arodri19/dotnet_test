@@ -4,16 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace dotnet_test.Models
+namespace dotnet_test.Models.ViewModels
 {
-    public class Medicine
+    public class MedicScheduleViewModel
     {
         [Key]
         public int ID { get; set; }
 
         public string Name { get; set; }
-        public string Obs { get; set; }
-
-        public ICollection<MedicineScheduleTreatment> MedicineScheduleTreatment { get; set; }
+        public string Crm { get; set; }
+        public TypeSpecialityEnum TypeSpeciality { get; set; }
     }
 }

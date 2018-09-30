@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace dotnet_test.Models
 {
-    public class Medicines
+    public class MedicineScheduleTreatment
     {
         [Key]
         public int ID { get; set; }

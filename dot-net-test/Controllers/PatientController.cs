@@ -18,7 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace dotnet_test.Controllers
 {
-    [Authorize(Roles = "Patient")]
+    //[Authorize(Roles = "SystemUser")]
     [Route("api/[controller]")]
     [ApiController]
     public class PatientController : ControllerBase

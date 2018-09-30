@@ -5,21 +5,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace dotnet_test.Models
+namespace dotnet_test.Models.ViewModels
 {
-    public class ScheduleTreatment
+    public class ScheduleTreatmentViewModel
     {
-        public Patient Patient { get; set; }
+
+        [ForeignKey("Patient")]
         public int PatientID { get; set; }
 
-        public Medic Medic { get; set; }
+        [ForeignKey("Medic")]
         public int MedicID { get; set; }
 
-        public Treatment Treatment { get; set; }
+        public TreatmentViewModel Treatment { get; set; }
+        [ForeignKey("Treatment")]
         public int TreatmentID { get; set; }
-       
+
+        public string Obs { get; set; }
         public DateTime Schedule { get; set; }
 
-        public ICollection<MedicineScheduleTreatment> MedicineScheduleTreatment { get; set; }
     }
 }

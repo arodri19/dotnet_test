@@ -59,7 +59,7 @@ namespace dotnet_test.Migrations
                     b.ToTable("Medicine");
                 });
 
-            modelBuilder.Entity("dotnet_test.Models.Medicines", b =>
+            modelBuilder.Entity("dotnet_test.Models.MedicineScheduleTreatment", b =>
                 {
                     b.Property<int>("MedicineID");
 
@@ -73,7 +73,7 @@ namespace dotnet_test.Migrations
 
                     b.HasIndex("ScheduleTreatmentID");
 
-                    b.ToTable("Medicines");
+                    b.ToTable("MedicineScheduleTreatment");
                 });
 
             modelBuilder.Entity("dotnet_test.Models.Patient", b =>
@@ -103,15 +103,11 @@ namespace dotnet_test.Migrations
 
                     b.Property<int>("PatientID");
 
-                    b.Property<int>("ID");
+                    b.Property<int>("TreatmentID");
 
-                    b.Property<string>("Obs");
+                    b.Property<DateTime>("Schedule");
 
-                    b.Property<string>("Schedule");
-
-                    b.Property<int>("TypeTreatment");
-
-                    b.HasKey("MedicID", "PatientID");
+                    b.HasKey("MedicID", "PatientID", "TreatmentID");
 
                     b.HasIndex("PatientID");
 
@@ -141,17 +137,32 @@ namespace dotnet_test.Migrations
                     b.ToTable("SystemUser");
                 });
 
-            modelBuilder.Entity("dotnet_test.Models.Medicines", b =>
+            modelBuilder.Entity("dotnet_test.Models.Treatment", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Obs");
+
+                    b.Property<int>("TypeTreatment");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Treatment");
+                });
+
+            modelBuilder.Entity("dotnet_test.Models.MedicineScheduleTreatment", b =>
                 {
                     b.HasOne("dotnet_test.Models.Medicine", "Medicine")
-                        .WithMany("Medicines")
+                        .WithMany("MedicineScheduleTreatment")
                         .HasForeignKey("MedicineID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("dotnet_test.Models.ScheduleTreatment", "ScheduleTreatment")
-                        .WithMany("Medicines")
+                        .WithMany("MedicineScheduleTreatment")
                         .HasForeignKey("ScheduleTreatmentID")
-                        .HasPrincipalKey("ID")
+                        .HasPrincipalKey("TreatmentID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -165,6 +176,11 @@ namespace dotnet_test.Migrations
                     b.HasOne("dotnet_test.Models.Patient", "Patient")
                         .WithMany("ScheduleTreatment")
                         .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("dotnet_test.Models.Treatment", "Treatment")
+                        .WithMany("ScheduleTreatment")
+                        .HasForeignKey("TreatmentID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

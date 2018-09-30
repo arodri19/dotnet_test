@@ -11,6 +11,7 @@ using dotnet_test.Models;
 using dotnet_test.Models.ViewModels;
 using dotnet_test.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -20,14 +21,13 @@ namespace dotnet_test.Controllers
     //[Authorize(Roles ="SystemUser")]
     [Route("api/[controller]")]
     [ApiController]
-    public class MedicController : ControllerBase
+    public class SystemUserController : ControllerBase
     {
-
-        private IMedicService _userService;
+        private ISystemUserService _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
 
-        public MedicController(IMedicService userService, IMapper mapper, IOptions<AppSettings> appSettings)
+        public SystemUserController(ISystemUserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _userService = userService;
             _mapper = mapper;
@@ -35,8 +35,8 @@ namespace dotnet_test.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("medics/authenticate")]
-        public IActionResult Authenticate([FromBody]MedicViewModel userVM)
+        [HttpPost("systemusers/authenticate")]
+        public IActionResult Authenticate([FromBody]SystemUserViewModel userVM)
         {
             var user = _userService.Authenticate(userVM.Cpf, userVM.Password);
 
@@ -64,17 +64,16 @@ namespace dotnet_test.Controllers
                 Id = user.ID,
                 Cpf = user.Cpf,
                 Name = user.Name,
-                Crm = user.Crm,
                 Token = tokenString
             });
         }
 
         [AllowAnonymous]
-        [HttpPost("medics")]
-        public ActionResult Post([FromBody] MedicViewModel userVM)
+        [HttpPost("systemusers")]
+        public ActionResult Post([FromBody] SystemUserViewModel userVM)
         {
 
-            var user = _mapper.Map<Medic>(userVM);
+            var user = _mapper.Map<SystemUser>(userVM);
             try
             {
                 _userService.Create(user, userVM.Password);
@@ -87,32 +86,31 @@ namespace dotnet_test.Controllers
         }
 
         // GET api/values
-        [HttpGet("medics")]
+        [HttpGet("systemusers")]
         public ActionResult GetAll()
         {
             var users = _userService.GetAll();
-            var viewUser = _mapper.Map<IList<MedicViewModel>>(users);
-            
+            var viewUser = _mapper.Map<IList<SystemUserViewModel>>(users);
 
             return Ok(viewUser);
         }
 
         // GET api/values/5
-        [HttpGet("medics/{name}/{cpf}/{crm}")]
-        public ActionResult Get(string name, string cpf, string crm)
+        [HttpGet("systemusers/{name}/{cpf}")]
+        public ActionResult Get(string name, string cpf)
         {
-            var user = _userService.GetByValues(name, cpf, crm);
-            var viewUser = _mapper.Map<IList<MedicViewModel>>(user);
+            var user = _userService.GetByValues(name, cpf);
+            var viewUser = _mapper.Map<IList<SystemUserViewModel>>(user);
 
             return Ok(viewUser);
         }
 
         // PUT api/values/5
-        [HttpPut("medics/{id}")]
-        public ActionResult Put(int id, [FromBody] MedicViewModel userVM)
+        [HttpPut("systemusers/{id}")]
+        public ActionResult Put(int id, [FromBody] SystemUserViewModel userVM)
         {
             // map dto to entity and set id
-            var user = _mapper.Map<Medic>(userVM);
+            var user = _mapper.Map<SystemUser>(userVM);
             user.ID = id;
 
             try
@@ -129,7 +127,7 @@ namespace dotnet_test.Controllers
         }
 
         // DELETE api/values/5
-        [HttpDelete("medics/{id}")]
+        [HttpDelete("systemusers/{id}")]
         public ActionResult Delete(int id)
         {
             _userService.Delete(id);

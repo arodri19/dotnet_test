@@ -77,20 +77,32 @@ namespace dotnet_test.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScheduleTreatment",
+                name: "Treatment",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false),
-                    PatientID = table.Column<int>(nullable: false),
-                    MedicID = table.Column<int>(nullable: false),
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     TypeTreatment = table.Column<int>(nullable: false),
-                    Obs = table.Column<string>(nullable: true),
-                    Schedule = table.Column<string>(nullable: true)
+                    Obs = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScheduleTreatment", x => new { x.MedicID, x.PatientID });
-                    table.UniqueConstraint("AK_ScheduleTreatment_ID", x => x.ID);
+                    table.PrimaryKey("PK_Treatment", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ScheduleTreatment",
+                columns: table => new
+                {
+                    PatientID = table.Column<int>(nullable: false),
+                    MedicID = table.Column<int>(nullable: false),
+                    TreatmentID = table.Column<int>(nullable: false),
+                    Schedule = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScheduleTreatment", x => new { x.MedicID, x.PatientID, x.TreatmentID });
+                    table.UniqueConstraint("AK_ScheduleTreatment_TreatmentID", x => x.TreatmentID);
                     table.ForeignKey(
                         name: "FK_ScheduleTreatment_Medic_MedicID",
                         column: x => x.MedicID,
@@ -103,10 +115,16 @@ namespace dotnet_test.Migrations
                         principalTable: "Patient",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ScheduleTreatment_Treatment_TreatmentID",
+                        column: x => x.TreatmentID,
+                        principalTable: "Treatment",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Medicines",
+                name: "MedicineScheduleTreatment",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false),
@@ -115,25 +133,25 @@ namespace dotnet_test.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Medicines", x => new { x.MedicineID, x.ScheduleTreatmentID });
-                    table.UniqueConstraint("AK_Medicines_ID", x => x.ID);
+                    table.PrimaryKey("PK_MedicineScheduleTreatment", x => new { x.MedicineID, x.ScheduleTreatmentID });
+                    table.UniqueConstraint("AK_MedicineScheduleTreatment_ID", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Medicines_Medicine_MedicineID",
+                        name: "FK_MedicineScheduleTreatment_Medicine_MedicineID",
                         column: x => x.MedicineID,
                         principalTable: "Medicine",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Medicines_ScheduleTreatment_ScheduleTreatmentID",
+                        name: "FK_MedicineScheduleTreatment_ScheduleTreatment_ScheduleTreatmentID",
                         column: x => x.ScheduleTreatmentID,
                         principalTable: "ScheduleTreatment",
-                        principalColumn: "ID",
+                        principalColumn: "TreatmentID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Medicines_ScheduleTreatmentID",
-                table: "Medicines",
+                name: "IX_MedicineScheduleTreatment_ScheduleTreatmentID",
+                table: "MedicineScheduleTreatment",
                 column: "ScheduleTreatmentID");
 
             migrationBuilder.CreateIndex(
@@ -145,7 +163,7 @@ namespace dotnet_test.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Medicines");
+                name: "MedicineScheduleTreatment");
 
             migrationBuilder.DropTable(
                 name: "SystemUser");
@@ -161,6 +179,9 @@ namespace dotnet_test.Migrations
 
             migrationBuilder.DropTable(
                 name: "Patient");
+
+            migrationBuilder.DropTable(
+                name: "Treatment");
         }
     }
 }

@@ -51,6 +51,10 @@ namespace dot_net_test
                             Name = "André Rodrigues"
                         }
                     });
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Por favor, entre com o texto Bearer e o token gerado /Bearer token /", Name = "Authorization", Type = "apiKey" });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                { "Bearer", Enumerable.Empty<string>() },
+            });
             });
 
             services.AddDbContext<HealthcareContext>
@@ -85,7 +89,8 @@ namespace dot_net_test
                                 // return unauthorized if user no longer exists
                                 context.Fail("Unauthorized");
                             }
-                        } else if (context.Principal.Claims.ToList()[1].Value == "Patient")
+                        }
+                        else if (context.Principal.Claims.ToList()[1].Value == "Patient")
                         {
                             var patientService = context.HttpContext.RequestServices.GetRequiredService<IPatientService>();
                             var userId = int.Parse(context.Principal.Identity.Name);
@@ -95,6 +100,21 @@ namespace dot_net_test
                                 // return unauthorized if user no longer exists
                                 context.Fail("Unauthorized");
                             }
+                        }
+                        else if (context.Principal.Claims.ToList()[1].Value == "SystemUser")
+                        {
+                            var sysUserService = context.HttpContext.RequestServices.GetRequiredService<IPatientService>();
+                            var userId = int.Parse(context.Principal.Identity.Name);
+                            var sysUser = sysUserService.GetById(userId);
+                            if (sysUser == null)
+                            {
+                                // return unauthorized if user no longer exists
+                                context.Fail("Unauthorized");
+                            }
+                        }
+                        else
+                        {
+                            context.Fail("Unauthorized");
                         }
 
                         return Task.CompletedTask;
@@ -113,6 +133,9 @@ namespace dot_net_test
 
             services.AddScoped<IMedicService, MedicService>();
             services.AddScoped<IPatientService, PatientService>();
+            services.AddScoped<ISystemUserService, SystemUserService>();
+            services.AddScoped<IMedicineService, MedicineService>();
+            services.AddScoped<IScheduleTreatmentService, ScheduleTreatmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

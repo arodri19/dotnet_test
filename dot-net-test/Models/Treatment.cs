@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace dotnet_test.Models
 {
-    public class Medicine
+    public class Treatment
     {
         [Key]
         public int ID { get; set; }
-
-        public string Name { get; set; }
+        public TypeTreatmentEnum TypeTreatment { get; set; }
         public string Obs { get; set; }
 
-        public ICollection<MedicineScheduleTreatment> MedicineScheduleTreatment { get; set; }
+        public ICollection<ScheduleTreatment> ScheduleTreatment { get; set; }
+
     }
 }
