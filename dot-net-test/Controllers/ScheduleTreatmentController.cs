@@ -14,8 +14,7 @@ using Microsoft.Extensions.Options;
 
 namespace dotnet_test.Controllers
 {
-    [Authorize(Roles = "Patient")]
-    [Authorize(Roles = "Medic")]
+    [Authorize(Roles = "Patient,Medic")]
     [Route("api/[controller]")]
     [ApiController]
     public class ScheduleTreatmentController : ControllerBase
@@ -59,7 +58,6 @@ namespace dotnet_test.Controllers
         /// Busca dos agendamentos associados aos pacientes - Médico
         /// </summary>
         /// <returns>Retorna todos os agendamentos associados aos pacientes</returns>
-        [Authorize(Roles = "Medic")]
         [HttpGet("treatments")]
         public ActionResult GetAll()
         {
@@ -78,7 +76,6 @@ namespace dotnet_test.Controllers
         /// <param name="cpf">Cpf do médico cadastrado no sistema</param>
         /// <param name="crm">Crm do médico cadastrado no sistema</param>
         /// <returns>Retorna todos os agendamentos associados aos pacientes</returns>
-        [Authorize(Roles = "Medic")]
         [HttpGet("treatments/medic/{id}/{name}/{cpf}/{crm}")]
         public ActionResult GetAllByMedic(int id = 0, string name = "", string cpf = "", string crm = "")
         {
@@ -96,7 +93,6 @@ namespace dotnet_test.Controllers
         /// <param name="name">Nome do paciente cadastrado no sistema</param>
         /// <param name="cpf">Cpf do paciente cadastrado no sistema</param>
         /// <returns>Retorna todos os agendamentos associados aos pacientes</returns>
-        [Authorize(Roles = "Patient")]
         [HttpGet("treatments/patient/{id}/{name}/{cpf}")]
         public ActionResult GetAllByPatient(int id = 0, string name = "", string cpf = "")
         {

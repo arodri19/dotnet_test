@@ -39,8 +39,7 @@ namespace dotnet_test.Services
 
         public void Delete(int id)
         {
-
-            var schedule = _context.MedicineScheduleTreatment.Find(id);
+            var schedule = _context.MedicineScheduleTreatment.Where(x => x.ScheduleTreatment.TreatmentID == id).FirstOrDefault<MedicineScheduleTreatment>();
 
             if (schedule == null)
                 throw new AppException("O Agendamento não foi encontrado");
@@ -83,7 +82,7 @@ namespace dotnet_test.Services
 
         public void Update(MedicineScheduleTreatment medicineScheduleVM)
         {
-            var schedule = _context.MedicineScheduleTreatment.Find(medicineScheduleVM.ScheduleTreatmentID);
+            var schedule = _context.MedicineScheduleTreatment.Where(x => x.ScheduleTreatment.TreatmentID == medicineScheduleVM.ScheduleTreatment.TreatmentID).FirstOrDefault<MedicineScheduleTreatment>();
 
             if (schedule == null)
                 throw new AppException("Lista de medicamentos associados ao paciente não foram encontrados");

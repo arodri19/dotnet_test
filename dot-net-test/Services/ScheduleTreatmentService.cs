@@ -46,13 +46,13 @@ namespace dotnet_test.Services
         public void Delete(int id)
         {
 
-            var schedule = _context.ScheduleTreatment.Find(id);
+            var schedule = _context.ScheduleTreatment.Where(x => x.TreatmentID == id).FirstOrDefault<ScheduleTreatment>();
 
             if (schedule == null)
                 throw new AppException("O Agendamento não foi encontrado");
 
 
-            if (schedule.Schedule >= DateTime.Now.AddDays(-1))
+            if (schedule.Schedule.AddHours(24) >= DateTime.Now)
             {
                 throw new AppException("O Agendamento não pode ser cancelado com menos de 24h de antecedencia");
             }
@@ -83,7 +83,7 @@ namespace dotnet_test.Services
 
         public ScheduleTreatment GetById(int id)
         {
-            return _context.ScheduleTreatment.Find(id);
+            return _context.ScheduleTreatment.Where(x => x.TreatmentID == id).FirstOrDefault<ScheduleTreatment>();
         }
 
         public List<ScheduleTreatment> GetByDate(string name, string cpf, DateTime? dateTimeSchedule = null)
@@ -95,7 +95,7 @@ namespace dotnet_test.Services
 
         public void Update(ScheduleTreatment scheduleVM)
         {
-            var schedule = _context.ScheduleTreatment.Find(scheduleVM.TreatmentID);
+            var schedule = _context.ScheduleTreatment.Where(x => x.TreatmentID == scheduleVM.TreatmentID).FirstOrDefault<ScheduleTreatment>();
 
             if (schedule == null)
                 throw new AppException("O Agendamento não foi encontrado");
