@@ -11,7 +11,9 @@ namespace dotnet_test.Services
     public interface IScheduleTreatmentService
     {
         IEnumerable<ScheduleTreatment> GetAll();
-        List<ScheduleTreatment> GetByValues(string name, DateTime dateTimeSchedule);
+        IEnumerable<ScheduleTreatment> GetByMedic(int id, string name, string cpf, string crm);
+        IEnumerable<ScheduleTreatment> GetByPatient(int id, string name, string cpf);
+        List<ScheduleTreatment> GetByDate(string name, string cpf, DateTime? dateTimeSchedule = null);
         ScheduleTreatment Create(ScheduleTreatment schedule, Treatment treatment);
         void Update(ScheduleTreatment schedule);
         void Delete(int id);
@@ -20,7 +22,6 @@ namespace dotnet_test.Services
     public class ScheduleTreatmentService : IScheduleTreatmentService
     {
         private HealthcareContext _context;
-        private PasswordTasks _passwordTasks = new PasswordTasks();
 
         public ScheduleTreatmentService(HealthcareContext context)
         {
@@ -44,12 +45,25 @@ namespace dotnet_test.Services
 
         public void Delete(int id)
         {
+
             var schedule = _context.ScheduleTreatment.Find(id);
-            if (schedule != null)
+
+            if (schedule == null)
+                throw new AppException("O Agendamento não foi encontrado");
+
+
+            if (schedule.Schedule >= DateTime.Now.AddDays(-1))
             {
-                _context.ScheduleTreatment.Remove(schedule);
-                _context.SaveChanges();
+                throw new AppException("O Agendamento não pode ser cancelado com menos de 24h de antecedencia");
             }
+
+            // update user properties
+            schedule.Cancel = true;
+
+            _context.ScheduleTreatment.Update(schedule);
+            _context.SaveChanges();
+
+            
         }
 
         public IEnumerable<ScheduleTreatment> GetAll()
@@ -57,15 +71,25 @@ namespace dotnet_test.Services
             return _context.Set<ScheduleTreatment>().Include(e=>e.Medic).Include(e=>e.Patient).Include(e=>e.Treatment);
         }
 
+        public IEnumerable<ScheduleTreatment> GetByMedic(int id , string name, string cpf, string crm)
+        {
+            return _context.Set<ScheduleTreatment>().Include(e => e.Medic).Include(e => e.Patient).Include(e => e.Treatment).Where(e => e.Medic.ID == id || e.Medic.Name.Contains(name) || e.Medic.Cpf == cpf || e.Medic.Crm == crm);
+        }
+
+        public IEnumerable<ScheduleTreatment> GetByPatient(int id, string name, string cpf)
+        {
+            return _context.Set<ScheduleTreatment>().Include(e => e.Medic).Include(e => e.Patient).Include(e => e.Treatment).Where(e => e.Patient.ID == id || e.Patient.Name.Contains(name) || e.Patient.Cpf == cpf);
+        }
+
         public ScheduleTreatment GetById(int id)
         {
             return _context.ScheduleTreatment.Find(id);
         }
 
-        public List<ScheduleTreatment> GetByValues(string name, DateTime dateTimeSchedule)
+        public List<ScheduleTreatment> GetByDate(string name, string cpf, DateTime? dateTimeSchedule = null)
         {
             return (from c in _context.ScheduleTreatment
-                    where c.Patient.Name == name || c.Schedule == dateTimeSchedule
+                    where c.Patient.Name == name || c.Schedule == dateTimeSchedule || c.Patient.Cpf == cpf
                     select c).ToList<ScheduleTreatment>();
         }
 
@@ -73,7 +97,7 @@ namespace dotnet_test.Services
         {
             var schedule = _context.ScheduleTreatment.Find(scheduleVM.TreatmentID);
 
-            if (scheduleVM == null)
+            if (schedule == null)
                 throw new AppException("O Agendamento não foi encontrado");
 
             if (scheduleVM.Schedule != scheduleVM.Schedule)

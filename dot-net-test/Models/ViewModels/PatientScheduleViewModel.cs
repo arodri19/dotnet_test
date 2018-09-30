@@ -12,5 +12,7 @@ namespace dotnet_test.Models.ViewModels
         public int ID { get; set; }
 
         public string Name { get; set; }
+
+        public bool Disabled { get; set; } = false;
     }
 }

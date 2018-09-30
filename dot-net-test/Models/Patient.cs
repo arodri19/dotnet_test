@@ -17,6 +17,8 @@ namespace dotnet_test.Models
         public byte[] PasswordSalt { get; set; }
         public DateTime LastAccess { get; set; }
 
+        public bool Disabled { get; set; } = false;
+
         public ICollection<ScheduleTreatment> ScheduleTreatment { get; set; }
     }
 }

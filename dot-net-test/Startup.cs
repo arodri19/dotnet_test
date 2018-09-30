@@ -19,6 +19,7 @@ using dotnet_test.Helpers;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.IO;
 
 namespace dot_net_test
 {
@@ -55,6 +56,14 @@ namespace dot_net_test
                 c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
                 { "Bearer", Enumerable.Empty<string>() },
             });
+                string appField =
+                    System.AppContext.BaseDirectory;
+                string appName =
+                    System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
+                string caminhoXmlDoc =
+                    Path.Combine(appField, $"{appName}.xml");
+
+                c.IncludeXmlComments(caminhoXmlDoc);
             });
 
             services.AddDbContext<HealthcareContext>
@@ -136,6 +145,7 @@ namespace dot_net_test
             services.AddScoped<ISystemUserService, SystemUserService>();
             services.AddScoped<IMedicineService, MedicineService>();
             services.AddScoped<IScheduleTreatmentService, ScheduleTreatmentService>();
+            services.AddScoped<IMedicineScheduleTreatmentService, MedicineScheduleTreatmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

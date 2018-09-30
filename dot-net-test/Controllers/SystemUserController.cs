@@ -18,7 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace dotnet_test.Controllers
 {
-    //[Authorize(Roles ="SystemUser")]
+    [Authorize(Roles ="SystemUser")]
     [Route("api/[controller]")]
     [ApiController]
     public class SystemUserController : ControllerBase
@@ -34,6 +34,11 @@ namespace dotnet_test.Controllers
             _appSettings = appSettings.Value;
         }
 
+        /// <summary>
+        /// Autenticação de usuário como Usuário do sistema, utilizando cpf e senha - Qualquer pessoa
+        /// </summary>
+        /// <param name="userVM">Objeto do SystemUserViewModel</param>
+        /// <returns>Retorna algumas informações sobre o usuário e o token a ser utilizado enquanto estiver utilizando este serviço</returns>
         [AllowAnonymous]
         [HttpPost("systemusers/authenticate")]
         public IActionResult Authenticate([FromBody]SystemUserViewModel userVM)
@@ -41,7 +46,7 @@ namespace dotnet_test.Controllers
             var user = _userService.Authenticate(userVM.Cpf, userVM.Password);
 
             if (user == null)
-                return BadRequest(new { errorMessage = "Senha ou Cpf incorretos" });
+                return BadRequest(new { message = "Senha ou Cpf incorretos" });
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -68,6 +73,11 @@ namespace dotnet_test.Controllers
             });
         }
 
+        /// <summary>
+        /// Cadastra um usuário do sistema no sistema - Usuário do sistema
+        /// </summary>
+        /// <param name="userVM">Objeto do SystemUserViewModel</param>
+        /// <returns>Cadastro realizado com sucesso</returns>
         [AllowAnonymous]
         [HttpPost("systemusers")]
         public ActionResult Post([FromBody] SystemUserViewModel userVM)
@@ -81,11 +91,14 @@ namespace dotnet_test.Controllers
             }
             catch (AppException ex)
             {
-                return BadRequest(new { errorMessage = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
 
-        // GET api/values
+        /// <summary>
+        /// Busca dos usuários do sistema cadastrados no sistema - Usuário do sistema
+        /// </summary>
+        /// <returns>Retorna todos os usuários do sistema cadastrados no sistema</returns>
         [HttpGet("systemusers")]
         public ActionResult GetAll()
         {
@@ -95,7 +108,12 @@ namespace dotnet_test.Controllers
             return Ok(viewUser);
         }
 
-        // GET api/values/5
+        /// <summary>
+        /// Busca dos usuários do sistema cadastrados no sistema - Usuário do sistema
+        /// </summary>
+        /// <param name="name">Nome do usuário do sistema</param>
+        /// <param name="cpf">Cpf do usuário do sistema</param>
+        /// <returns>Retorna todos os usuários dos sistemas cadastrados no sistema de acordo com os parametros utilizados</returns>
         [HttpGet("systemusers/{name}/{cpf}")]
         public ActionResult Get(string name, string cpf)
         {
@@ -105,7 +123,12 @@ namespace dotnet_test.Controllers
             return Ok(viewUser);
         }
 
-        // PUT api/values/5
+        /// <summary>
+        /// Atualiza os dados dos usuários do sistema cadastrados no sistema - Usuário do sistema
+        /// </summary>
+        /// <param name="id">Código do usuário do sistema cadastrado no sistema</param>
+        /// <param name="userVM">Objeto do SystemUserViewModel</param>
+        /// <returns>Atualiza dados do usuário do sistema, de acordo com os parametros utilizados</returns>
         [HttpPut("systemusers/{id}")]
         public ActionResult Put(int id, [FromBody] SystemUserViewModel userVM)
         {
@@ -126,7 +149,11 @@ namespace dotnet_test.Controllers
             }
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// Atualiza o status do usuário do sistema no hospital - Usuário do sistema
+        /// </summary>
+        /// <param name="id">Código do usuário do sistema registrado no sistema</param>
+        /// <returns>Atualiza dados do usuário do sistema, de acordo com os parametros utilizados</returns>
         [HttpDelete("systemusers/{id}")]
         public ActionResult Delete(int id)
         {

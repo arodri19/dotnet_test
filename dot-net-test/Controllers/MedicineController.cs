@@ -14,7 +14,7 @@ using Microsoft.Extensions.Options;
 
 namespace dotnet_test.Controllers
 {
-    //[Authorize(Roles = "Medic")]
+    [Authorize(Roles = "Medic")]
     [Route("api/[controller]")]
     [ApiController]
     public class MedicineController : ControllerBase
@@ -30,7 +30,11 @@ namespace dotnet_test.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [AllowAnonymous]
+        /// <summary>
+        /// Cadastra um medicamento no sistema - Médico
+        /// </summary>
+        /// <param name="medicineVM">Objeto do MedicineViewModel</param>
+        /// <returns>Cadastro realizado com sucesso</returns>
         [HttpPost("medicines")]
         public ActionResult Post([FromBody] MedicineViewModel medicineVM)
         {
@@ -43,11 +47,14 @@ namespace dotnet_test.Controllers
             }
             catch (AppException ex)
             {
-                return BadRequest(new { errorMessage = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
 
-        // GET api/values
+        /// <summary>
+        /// Busca dos medicamentos cadastrados no sistema - Médico
+        /// </summary>
+        /// <returns>Retorna todos os medicamentos cadastrados no sistema</returns>
         [HttpGet("medicines")]
         public ActionResult GetAll()
         {
@@ -58,7 +65,11 @@ namespace dotnet_test.Controllers
             return Ok(viewMedicine);
         }
 
-        // GET api/values/5
+        /// <summary>
+        /// Busca dos medicamentos cadastrados no sistema - Médico
+        /// </summary>
+        /// <param name="name">Nome do medicamento</param>
+        /// <returns>Retorna todos os medicamentos cadastrados no sistema de acordo com os parametros utilizados</returns>
         [HttpGet("medicines/{name}")]
         public ActionResult Get(string name)
         {
@@ -68,7 +79,12 @@ namespace dotnet_test.Controllers
             return Ok(viewMedicine);
         }
 
-        // PUT api/values/5
+        /// <summary>
+        /// Atualiza os dados dos medicamentos cadastrados no sistema - Médico
+        /// </summary>
+        /// <param name="id">Código do medicamento cadastrado no sistema</param>
+        /// <param name="medicineVM">Objeto do MedicineViewModel</param>
+        /// <returns>Atualiza dados do medicamento, de acordo com os parametros utilizados</returns>
         [HttpPut("medicines/{id}")]
         public ActionResult Put(int id, [FromBody] MedicineViewModel medicineVM)
         {
@@ -89,7 +105,11 @@ namespace dotnet_test.Controllers
             }
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// Atualiza o status do medicamento no hospital - Médico
+        /// </summary>
+        /// <param name="id">Código do medicamento registrado no sistema</param>
+        /// <returns>Atualiza dados do medicamento, de acordo com os parametros utilizados</returns>
         [HttpDelete("medicines/{id}")]
         public ActionResult Delete(int id)
         {

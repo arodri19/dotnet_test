@@ -9,9 +9,6 @@ namespace dotnet_test.Models.ViewModels
 {
     public class ScheduleTreatmentResultViewModel
     {
-        [Key]
-        public int ID { get; set; }
-
         public PatientScheduleViewModel Patient { get; set; }
         [ForeignKey("Patient")]
         public int PatientID { get; set; }
@@ -26,7 +23,9 @@ namespace dotnet_test.Models.ViewModels
 
         public DateTime Schedule { get; set; }
 
-        public ICollection<MedicineScheduleTreatmentViewModel> Medicines { get; set; }
+        public bool Cancel { get; set; } = false;
+
+        public ICollection<MedicineScheduleTreatmentViewModel> MedicineScheduleTreatmentViewModel { get; set; }
 
     }
 }

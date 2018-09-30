@@ -20,6 +20,8 @@ namespace dotnet_test.Models
         public string Crm { get; set; }
         public TypeSpecialityEnum TypeSpeciality { get; set; }
 
+        public bool Disabled { get; set; } = false;
+
         public ICollection<ScheduleTreatment> ScheduleTreatment { get; set; }
 
     }

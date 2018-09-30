@@ -17,7 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace dotnet_test.Controllers
 {
-    //[Authorize(Roles ="SystemUser")]
+    [Authorize(Roles ="SystemUser")]
     [Route("api/[controller]")]
     [ApiController]
     public class MedicController : ControllerBase
@@ -34,6 +34,11 @@ namespace dotnet_test.Controllers
             _appSettings = appSettings.Value;
         }
 
+        /// <summary>
+        /// Autenticação de usuário como Médico, utilizando cpf e senha - Qualquer pessoa
+        /// </summary>
+        /// <param name="userVM">Objeto do MedicViewModel</param>
+        /// <returns>Retorna algumas informações sobre o usuário e o token a ser utilizado enquanto estiver utilizando este serviço</returns>
         [AllowAnonymous]
         [HttpPost("medics/authenticate")]
         public IActionResult Authenticate([FromBody]MedicViewModel userVM)
@@ -41,7 +46,7 @@ namespace dotnet_test.Controllers
             var user = _userService.Authenticate(userVM.Cpf, userVM.Password);
 
             if (user == null)
-                return BadRequest(new { errorMessage = "Senha ou Cpf incorretos" });
+                return BadRequest(new { message = "Senha ou Cpf incorretos" });
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -69,6 +74,11 @@ namespace dotnet_test.Controllers
             });
         }
 
+        /// <summary>
+        /// Cadastra um médico no sistema - Qualquer pessoa
+        /// </summary>
+        /// <param name="userVM">Objeto do MedicViewModel</param>
+        /// <returns>Cadastro realizado com sucesso</returns>
         [AllowAnonymous]
         [HttpPost("medics")]
         public ActionResult Post([FromBody] MedicViewModel userVM)
@@ -82,11 +92,14 @@ namespace dotnet_test.Controllers
             }
             catch (AppException ex)
             {
-                return BadRequest(new { errorMessage = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
 
-        // GET api/values
+        /// <summary>
+        /// Busca dos médicos cadastrados no sistema - Usuário do sistema
+        /// </summary>
+        /// <returns>Retorna todos os médicos cadastrados no sistema</returns>
         [HttpGet("medics")]
         public ActionResult GetAll()
         {
@@ -97,7 +110,13 @@ namespace dotnet_test.Controllers
             return Ok(viewUser);
         }
 
-        // GET api/values/5
+        /// <summary>
+        /// Busca dos médicos cadastrados no sistema - Usuário do sistema
+        /// </summary>
+        /// <param name="name">Nome do médico</param>
+        /// <param name="cpf">Cpf do médico</param>
+        /// <param name="crm">Crm do médico</param>
+        /// <returns>Retorna todos os médicos cadastrados no sistema de acordo com os parametros utilizados</returns>
         [HttpGet("medics/{name}/{cpf}/{crm}")]
         public ActionResult Get(string name, string cpf, string crm)
         {
@@ -107,7 +126,12 @@ namespace dotnet_test.Controllers
             return Ok(viewUser);
         }
 
-        // PUT api/values/5
+        /// <summary>
+        /// Atualiza os dados dos médicos cadastrados no sistema - Usuário do sistema
+        /// </summary>
+        /// <param name="id">Código do médico cadastrado no sistema</param>
+        /// <param name="userVM">Objeto do MedicViewModel</param>
+        /// <returns>Atualiza dados do médico, de acordo com os parametros utilizados</returns>
         [HttpPut("medics/{id}")]
         public ActionResult Put(int id, [FromBody] MedicViewModel userVM)
         {
@@ -128,7 +152,11 @@ namespace dotnet_test.Controllers
             }
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// Atualiza o status do Médico no hospital - Usuário do sistema
+        /// </summary>
+        /// <param name="id">Código do médico registrado no sistema</param>
+        /// <returns>Atualiza dados do médico, de acordo com os parametros utilizados</returns>
         [HttpDelete("medics/{id}")]
         public ActionResult Delete(int id)
         {

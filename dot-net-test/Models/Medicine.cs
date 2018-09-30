@@ -14,6 +14,8 @@ namespace dotnet_test.Models
         public string Name { get; set; }
         public string Obs { get; set; }
 
+        public bool Disabled { get; set; } = false;
+
         public ICollection<MedicineScheduleTreatment> MedicineScheduleTreatment { get; set; }
     }
 }

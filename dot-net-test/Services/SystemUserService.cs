@@ -71,11 +71,15 @@ namespace dotnet_test.Services
         public void Delete(int id)
         {
             var user = _context.SystemUser.Find(id);
-            if (user != null)
-            {
-                _context.SystemUser.Remove(user);
-                _context.SaveChanges();
-            }
+
+            if (user == null)
+                throw new AppException("Usuário não encontrado");
+
+            // update user properties
+            user.Disabled = true;
+
+            _context.SystemUser.Update(user);
+            _context.SaveChanges();
         }
 
         public IEnumerable<SystemUser> GetAll()
@@ -91,7 +95,7 @@ namespace dotnet_test.Services
         public List<SystemUser> GetByValues(string name, string cpf)
         {
             return (from c in _context.SystemUser
-                    where c.Cpf == cpf || c.Name == name
+                    where c.Cpf == cpf || c.Name.Contains(name)
                     select c).ToList<SystemUser>();
         }
 

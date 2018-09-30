@@ -20,7 +20,8 @@ namespace dotnet_test.Migrations
                     PasswordSalt = table.Column<byte[]>(nullable: true),
                     LastAccess = table.Column<DateTime>(nullable: false),
                     Crm = table.Column<string>(nullable: true),
-                    TypeSpeciality = table.Column<int>(nullable: false)
+                    TypeSpeciality = table.Column<int>(nullable: false),
+                    Disabled = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,7 +35,8 @@ namespace dotnet_test.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
-                    Obs = table.Column<string>(nullable: true)
+                    Obs = table.Column<string>(nullable: true),
+                    Disabled = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,7 +53,8 @@ namespace dotnet_test.Migrations
                     Cpf = table.Column<string>(nullable: true),
                     PasswordHash = table.Column<byte[]>(nullable: true),
                     PasswordSalt = table.Column<byte[]>(nullable: true),
-                    LastAccess = table.Column<DateTime>(nullable: false)
+                    LastAccess = table.Column<DateTime>(nullable: false),
+                    Disabled = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,6 +72,7 @@ namespace dotnet_test.Migrations
                     PasswordHash = table.Column<byte[]>(nullable: true),
                     PasswordSalt = table.Column<byte[]>(nullable: true),
                     LastAccess = table.Column<DateTime>(nullable: false),
+                    Disabled = table.Column<bool>(nullable: false),
                     TypeUser = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -83,7 +87,8 @@ namespace dotnet_test.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     TypeTreatment = table.Column<int>(nullable: false),
-                    Obs = table.Column<string>(nullable: true)
+                    Obs = table.Column<string>(nullable: true),
+                    Disabled = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,7 +102,8 @@ namespace dotnet_test.Migrations
                     PatientID = table.Column<int>(nullable: false),
                     MedicID = table.Column<int>(nullable: false),
                     TreatmentID = table.Column<int>(nullable: false),
-                    Schedule = table.Column<DateTime>(nullable: false)
+                    Schedule = table.Column<DateTime>(nullable: false),
+                    Cancel = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -127,14 +133,13 @@ namespace dotnet_test.Migrations
                 name: "MedicineScheduleTreatment",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false),
                     MedicineID = table.Column<int>(nullable: false),
-                    ScheduleTreatmentID = table.Column<int>(nullable: false)
+                    ScheduleTreatmentID = table.Column<int>(nullable: false),
+                    Disabled = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MedicineScheduleTreatment", x => new { x.MedicineID, x.ScheduleTreatmentID });
-                    table.UniqueConstraint("AK_MedicineScheduleTreatment_ID", x => x.ID);
                     table.ForeignKey(
                         name: "FK_MedicineScheduleTreatment_Medicine_MedicineID",
                         column: x => x.MedicineID,

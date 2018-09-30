@@ -29,6 +29,8 @@ namespace dotnet_test.Migrations
 
                     b.Property<string>("Crm");
 
+                    b.Property<bool>("Disabled");
+
                     b.Property<DateTime>("LastAccess");
 
                     b.Property<string>("Name");
@@ -50,6 +52,8 @@ namespace dotnet_test.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Disabled");
+
                     b.Property<string>("Name");
 
                     b.Property<string>("Obs");
@@ -65,11 +69,9 @@ namespace dotnet_test.Migrations
 
                     b.Property<int>("ScheduleTreatmentID");
 
-                    b.Property<int>("ID");
+                    b.Property<bool>("Disabled");
 
                     b.HasKey("MedicineID", "ScheduleTreatmentID");
-
-                    b.HasAlternateKey("ID");
 
                     b.HasIndex("ScheduleTreatmentID");
 
@@ -83,6 +85,8 @@ namespace dotnet_test.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Cpf");
+
+                    b.Property<bool>("Disabled");
 
                     b.Property<DateTime>("LastAccess");
 
@@ -105,6 +109,8 @@ namespace dotnet_test.Migrations
 
                     b.Property<int>("TreatmentID");
 
+                    b.Property<bool>("Cancel");
+
                     b.Property<DateTime>("Schedule");
 
                     b.HasKey("MedicID", "PatientID", "TreatmentID");
@@ -121,6 +127,8 @@ namespace dotnet_test.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Cpf");
+
+                    b.Property<bool>("Disabled");
 
                     b.Property<DateTime>("LastAccess");
 
@@ -142,6 +150,8 @@ namespace dotnet_test.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Disabled");
 
                     b.Property<string>("Obs");
 

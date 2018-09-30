@@ -70,11 +70,15 @@ namespace dotnet_test.Services
         public void Delete(int id)
         {
             var user = _context.Patient.Find(id);
-            if (user != null)
-            {
-                _context.Patient.Remove(user);
-                _context.SaveChanges();
-            }
+
+            if (user == null)
+                throw new AppException("Usuário não encontrado");
+
+            // update user properties
+            user.Disabled = true;
+
+            _context.Patient.Update(user);
+            _context.SaveChanges();
         }
 
         public IEnumerable<Patient> GetAll()
@@ -90,7 +94,7 @@ namespace dotnet_test.Services
         public List<Patient> GetByValues(string name, string cpf)
         {
             return (from c in _context.Patient
-                    where c.Cpf == cpf || c.Name == name
+                    where c.Cpf == cpf || c.Name.Contains(name)
                     select c).ToList<Patient>();
         }
 

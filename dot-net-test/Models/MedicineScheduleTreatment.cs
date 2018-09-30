@@ -9,9 +9,6 @@ namespace dotnet_test.Models
 {
     public class MedicineScheduleTreatment
     {
-        [Key]
-        public int ID { get; set; }
-
         public Medicine Medicine { get; set; }
         [ForeignKey("Medicine")]
         public int MedicineID { get; set; }
@@ -19,5 +16,7 @@ namespace dotnet_test.Models
         public ScheduleTreatment ScheduleTreatment { get; set; }
         [ForeignKey("ScheduleTreatment")]
         public int ScheduleTreatmentID { get; set; }
+
+        public bool Disabled { get; set; } = false;
     }
 }

@@ -20,6 +20,8 @@ namespace dotnet_test.Models
        
         public DateTime Schedule { get; set; }
 
+        public bool Cancel { get; set; } = false;
+
         public ICollection<MedicineScheduleTreatment> MedicineScheduleTreatment { get; set; }
     }
 }

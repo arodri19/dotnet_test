@@ -16,5 +16,7 @@ namespace dotnet_test.Models.ViewModels
         public string Password { get; set; }
         public string Crm { get; set; }
         public TypeSpecialityEnum TypeSpeciality { get; set; }
+
+        public bool Disabled { get; set; } = false;
     }
 }

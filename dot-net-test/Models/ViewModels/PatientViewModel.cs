@@ -14,5 +14,7 @@ namespace dotnet_test.Models.ViewModels
         public string Name { get; set; }
         public string Cpf { get; set; }
         public string Password { get; set; }
+
+        public bool Disabled { get; set; } = false;
     }
 }

@@ -36,6 +36,9 @@ namespace dotnet_test.Helpers
             CreateMap<MedicineScheduleTreatment, MedicineScheduleTreatmentViewModel>();
             CreateMap<MedicineScheduleTreatmentViewModel, MedicineScheduleTreatment>();
 
+            CreateMap<MedicineScheduleTreatment, MedicineScheduleTreatmentViewModel>();
+            CreateMap<MedicineScheduleTreatmentViewModel, MedicineScheduleTreatment>();
+
             CreateMap<Treatment, TreatmentViewModel>();
             CreateMap<TreatmentViewModel, Treatment>();
         }

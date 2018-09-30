@@ -13,5 +13,7 @@ namespace dotnet_test.Models.ViewModels
 
         public string Name { get; set; }
         public string Obs { get; set; }
+
+        public bool Disabled { get; set; } = false;
     }
 }

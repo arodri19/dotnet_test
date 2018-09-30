@@ -20,7 +20,6 @@ namespace dotnet_test.Services
     public class MedicineService : IMedicineService
     {
         private HealthcareContext _context;
-        private PasswordTasks _passwordTasks = new PasswordTasks();
 
         public MedicineService(HealthcareContext context)
         {
@@ -39,11 +38,15 @@ namespace dotnet_test.Services
         public void Delete(int id)
         {
             var medicine = _context.Medicine.Find(id);
-            if (medicine != null)
-            {
-                _context.Medicine.Remove(medicine);
-                _context.SaveChanges();
-            }
+
+            if (medicine == null)
+                throw new AppException("O medicamento não foi encontrado");
+
+            // update user properties
+            medicine.Disabled = true;
+
+            _context.Medicine.Update(medicine);
+            _context.SaveChanges();
         }
 
         public IEnumerable<Medicine> GetAll()
@@ -59,7 +62,7 @@ namespace dotnet_test.Services
         public List<Medicine> GetByValues(string name)
         {
             return (from c in _context.Medicine
-                    where c.Name == name
+                    where c.Name.Contains(name)
                     select c).ToList<Medicine>();
         }
 
@@ -67,7 +70,7 @@ namespace dotnet_test.Services
         {
             var medicine = _context.Medicine.Find(medicineVM.ID);
 
-            if (medicineVM == null)
+            if (medicine == null)
                 throw new AppException("O medicamento não foi encontrado");
 
             if (medicineVM.Name != medicineVM.Name)

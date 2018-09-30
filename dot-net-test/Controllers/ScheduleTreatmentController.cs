@@ -14,6 +14,8 @@ using Microsoft.Extensions.Options;
 
 namespace dotnet_test.Controllers
 {
+    [Authorize(Roles = "Patient")]
+    [Authorize(Roles = "Medic")]
     [Route("api/[controller]")]
     [ApiController]
     public class ScheduleTreatmentController : ControllerBase
@@ -29,8 +31,13 @@ namespace dotnet_test.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [AllowAnonymous]
-        [HttpPost("medicines")]
+        /// <summary>
+        /// Realiza um agendamento para um paciente no sistema - Paciente
+        /// </summary>
+        /// <param name="scheduleVM">Objeto do ScheduleTreatmentViewModel</param>
+        /// <returns>Cadastro realizado com sucesso</returns>
+        /// [Authorize(Roles = "Patient")]
+        [HttpPost("treatments")]
         public ActionResult Post([FromBody] ScheduleTreatmentViewModel scheduleVM)
         {
 
@@ -44,33 +51,90 @@ namespace dotnet_test.Controllers
             }
             catch (AppException ex)
             {
-                return BadRequest(new { errorMessage = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
 
-        // GET api/values
-        [HttpGet("medicines")]
+        /// <summary>
+        /// Busca dos agendamentos associados aos pacientes - Médico
+        /// </summary>
+        /// <returns>Retorna todos os agendamentos associados aos pacientes</returns>
+        [Authorize(Roles = "Medic")]
+        [HttpGet("treatments")]
         public ActionResult GetAll()
         {
-            var medicines = _scheduleService.GetAll();
-            var viewMedicine = _mapper.Map<IList<ScheduleTreatmentResultViewModel>>(medicines);
+            var schedules = _scheduleService.GetAll();
+            var viewSchedule = _mapper.Map<IList<ScheduleTreatmentResultViewModel>>(schedules);
 
 
-            return Ok(viewMedicine);
+            return Ok(viewSchedule);
         }
 
-        // GET api/values/5
-        [HttpGet("medicines/{name}/{dateTimeSchedule}")]
-        public ActionResult Get(string name, DateTime dateTimeSchedule)
+        /// <summary>
+        /// Busca dos agendamentos dos pacientes por parametros relacionados ao médico - Médico
+        /// </summary>
+        /// <param name="id">Id do médico cadastrado no sistema</param>
+        /// <param name="name">Nome do médico cadastrado no sistema</param>
+        /// <param name="cpf">Cpf do médico cadastrado no sistema</param>
+        /// <param name="crm">Crm do médico cadastrado no sistema</param>
+        /// <returns>Retorna todos os agendamentos associados aos pacientes</returns>
+        [Authorize(Roles = "Medic")]
+        [HttpGet("treatments/medic/{id}/{name}/{cpf}/{crm}")]
+        public ActionResult GetAllByMedic(int id = 0, string name = "", string cpf = "", string crm = "")
         {
-            var medicine = _scheduleService.GetByValues(name, dateTimeSchedule);
-            var viewMedicine = _mapper.Map<IList<ScheduleTreatmentViewModel>>(medicine);
+            var schedules = _scheduleService.GetByMedic(id, name, cpf, crm);
+            var viewSchedule = _mapper.Map<IList<ScheduleTreatmentResultViewModel>>(schedules);
+
+
+            return Ok(viewSchedule);
+        }
+
+        /// <summary>
+        /// Busca dos agendamentos dos pacientes por parametros relacionados ao paciente - Médico
+        /// </summary>
+        /// <param name="id">Id do paciente cadastrado no sistema</param>
+        /// <param name="name">Nome do paciente cadastrado no sistema</param>
+        /// <param name="cpf">Cpf do paciente cadastrado no sistema</param>
+        /// <returns>Retorna todos os agendamentos associados aos pacientes</returns>
+        [Authorize(Roles = "Patient")]
+        [HttpGet("treatments/patient/{id}/{name}/{cpf}")]
+        public ActionResult GetAllByPatient(int id = 0, string name = "", string cpf = "")
+        {
+            var schedules = _scheduleService.GetByPatient(id, name, cpf);
+            var viewMedicine = _mapper.Map<IList<ScheduleTreatmentResultViewModel>>(schedules);
+
 
             return Ok(viewMedicine);
         }
 
-        // PUT api/values/5
-        [HttpPut("medicines/{idTreatment}")]
+        /// <summary>
+        /// Busca dos agendamentos dos pacientes por parametros relacionados ao paciente/data - Paciente
+        /// </summary>
+        /// <param name="name">Nome do paciente cadastrado no sistema</param>
+        /// <param name="cpf">Cpf do paciente cadastrado no sistema</param>
+        /// <param name="dateTimeSchedule">Data agendada do paciente</param>
+        /// <returns>Retorna todos os agendamentos associados aos pacientes</returns>
+        [HttpGet("treatments/{name}/{cpf}/{dateTimeSchedule}")]
+        public ActionResult GetByDate(string name = "", string cpf="", DateTime? dateTimeSchedule = null)
+        {
+            if (!dateTimeSchedule.HasValue)
+                dateTimeSchedule = DateTime.Now;
+
+
+            var schedule = _scheduleService.GetByDate(name, cpf, dateTimeSchedule);
+            var viewSchedule = _mapper.Map<IList<ScheduleTreatmentViewModel>>(schedule);
+
+            return Ok(viewSchedule);
+        }
+
+        /// <summary>
+        /// Atualiza os dados dos agendamentos dos pacientes - Paciente
+        /// </summary>
+        /// <param name="idTreatment">Código do tratamento feito no sistema</param>
+        /// <param name="scheduleVM">Objeto do ScheduleTreatmentViewModel</param>
+        /// <returns>Atualiza dados do agendamentos associados ao paciente, de acordo com os parametros utilizados</returns>
+        [Authorize(Roles = "Patient")]
+        [HttpPut("treatments/{idTreatment}")]
         public ActionResult Put(int idTreatment, [FromBody] ScheduleTreatmentViewModel scheduleVM)
         {
             // map dto to entity and set id
@@ -90,12 +154,27 @@ namespace dotnet_test.Controllers
             }
         }
 
-        // DELETE api/values/5
-        [HttpDelete("medicines/{id}")]
+        /// <summary>
+        /// Atualiza o status do agendamento ao paciente - Paciente
+        /// </summary>
+        /// <param name="id">Código do agendamento feito no sistema</param>
+        /// <returns>Atualiza dados dos agendamentos associados ao paciente, de acordo com os parametros utilizados</returns>
+        [Authorize(Roles = "Patient")]
+        [HttpDelete("treatments/{id}")]
         public ActionResult Delete(int id)
         {
-            _scheduleService.Delete(id);
-            return Ok();
+            try
+            {
+                // save 
+                _scheduleService.Delete(id);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+
         }
     }
 }

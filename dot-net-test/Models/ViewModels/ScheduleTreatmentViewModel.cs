@@ -23,5 +23,7 @@ namespace dotnet_test.Models.ViewModels
         public string Obs { get; set; }
         public DateTime Schedule { get; set; }
 
+        public bool Cancel { get; set; } = false;
+
     }
 }

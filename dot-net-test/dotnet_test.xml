@@ -1,0 +1,286 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>dotnet_test</name>
+    </assembly>
+    <members>
+        <member name="M:dotnet_test.Controllers.MedicController.Authenticate(dotnet_test.Models.ViewModels.MedicViewModel)">
+            <summary>
+            Autenticação de usuário como Médico, utilizando cpf e senha - Qualquer pessoa
+            </summary>
+            <param name="userVM">Objeto do MedicViewModel</param>
+            <returns>Retorna algumas informações sobre o usuário e o token a ser utilizado enquanto estiver utilizando este serviço</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicController.Post(dotnet_test.Models.ViewModels.MedicViewModel)">
+            <summary>
+            Cadastra um médico no sistema - Qualquer pessoa
+            </summary>
+            <param name="userVM">Objeto do MedicViewModel</param>
+            <returns>Cadastro realizado com sucesso</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicController.GetAll">
+            <summary>
+            Busca dos médicos cadastrados no sistema - Usuário do sistema
+            </summary>
+            <returns>Retorna todos os médicos cadastrados no sistema</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicController.Get(System.String,System.String,System.String)">
+            <summary>
+            Busca dos médicos cadastrados no sistema - Usuário do sistema
+            </summary>
+            <param name="name">Nome do médico</param>
+            <param name="cpf">Cpf do médico</param>
+            <param name="crm">Crm do médico</param>
+            <returns>Retorna todos os médicos cadastrados no sistema de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicController.Put(System.Int32,dotnet_test.Models.ViewModels.MedicViewModel)">
+            <summary>
+            Atualiza os dados dos médicos cadastrados no sistema - Usuário do sistema
+            </summary>
+            <param name="id">Código do médico cadastrado no sistema</param>
+            <param name="userVM">Objeto do MedicViewModel</param>
+            <returns>Atualiza dados do médico, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicController.Delete(System.Int32)">
+            <summary>
+            Atualiza o status do Médico no hospital - Usuário do sistema
+            </summary>
+            <param name="id">Código do médico registrado no sistema</param>
+            <returns>Atualiza dados do médico, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineController.Post(dotnet_test.Models.ViewModels.MedicineViewModel)">
+            <summary>
+            Cadastra um medicamento no sistema - Médico
+            </summary>
+            <param name="medicineVM">Objeto do MedicineViewModel</param>
+            <returns>Cadastro realizado com sucesso</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineController.GetAll">
+            <summary>
+            Busca dos medicamentos cadastrados no sistema - Médico
+            </summary>
+            <returns>Retorna todos os medicamentos cadastrados no sistema</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineController.Get(System.String)">
+            <summary>
+            Busca dos medicamentos cadastrados no sistema - Médico
+            </summary>
+            <param name="name">Nome do medicamento</param>
+            <returns>Retorna todos os medicamentos cadastrados no sistema de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineController.Put(System.Int32,dotnet_test.Models.ViewModels.MedicineViewModel)">
+            <summary>
+            Atualiza os dados dos medicamentos cadastrados no sistema - Médico
+            </summary>
+            <param name="id">Código do medicamento cadastrado no sistema</param>
+            <param name="medicineVM">Objeto do MedicineViewModel</param>
+            <returns>Atualiza dados do medicamento, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineController.Delete(System.Int32)">
+            <summary>
+            Atualiza o status do medicamento no hospital - Médico
+            </summary>
+            <param name="id">Código do medicamento registrado no sistema</param>
+            <returns>Atualiza dados do medicamento, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineScheduleTreatmentController.Post(dotnet_test.Models.ViewModels.MedicineScheduleTreatmentViewModel)">
+            <summary>
+            Cadastra um medicamento para o paciente no sistema - Médico
+            </summary>
+            <param name="medicineScheduleVM">Objeto do MedicineScheduleTreatmentViewModel</param>
+            <returns>Cadastro realizado com sucesso</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineScheduleTreatmentController.GetAll">
+            <summary>
+            Busca dos medicamentos associados aos pacientes - Médico
+            </summary>
+            <returns>Retorna todos os medicamentos associados aos pacientes</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineScheduleTreatmentController.GetAllByMedic(System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Busca dos medicamentos associados aos pacientes por parametros relacionados ao médico - Médico
+            </summary>
+            <param name="id">Id do médico cadastrado no sistema</param>
+            <param name="name">Nome do médico cadastrado no sistema</param>
+            <param name="cpf">Cpf do médico cadastrado no sistema</param>
+            <param name="crm">Crm do médico cadastrado no sistema</param>
+            <returns>Retorna todos os medicamentos associados aos pacientes</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineScheduleTreatmentController.GetAllByPatient(System.Int32,System.String,System.String)">
+            <summary>
+            Busca dos medicamentos associados aos pacientes por parametros relacionados ao paciente - Médico
+            </summary>
+            <param name="id">Id do paciente cadastrado no sistema</param>
+            <param name="name">Nome do paciente cadastrado no sistema</param>
+            <param name="cpf">Cpf do paciente cadastrado no sistema</param>
+            <returns>Retorna todos os medicamentos associados aos pacientes</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineScheduleTreatmentController.GetByDate(System.String,System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Busca dos medicamentos associados aos pacientes por parametros relacionados ao paciente/data - Médico
+            </summary>
+            <param name="name">Nome do paciente cadastrado no sistema</param>
+            <param name="cpf">Cpf do paciente cadastrado no sistema</param>
+            <param name="dateTimeSchedule">Data agendada do paciente</param>
+            <returns>Retorna todos os medicamentos associados aos pacientes</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineScheduleTreatmentController.Put(System.Int32,dotnet_test.Models.ViewModels.MedicineScheduleTreatmentViewModel)">
+            <summary>
+            Atualiza os dados dos medicamentos associados ao usuário - Médico
+            </summary>
+            <param name="idScheduleTreatment">Código do agendamento feito no sistema</param>
+            <param name="scheduleVM">Objeto do MedicineScheduleTreatmentViewModel</param>
+            <returns>Atualiza dados do medicamentos associados ao paciente, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.MedicineScheduleTreatmentController.Delete(System.Int32)">
+            <summary>
+            Atualiza o status do medicamento ao paciente - Médico
+            </summary>
+            <param name="id">Código do agendamento feito no sistema</param>
+            <returns>Atualiza dados do medicamentos associados ao paciente, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.PatientController.Authenticate(dotnet_test.Models.ViewModels.PatientViewModel)">
+            <summary>
+            Autenticação de usuário como Paciente, utilizando cpf e senha - Qualquer pessoa
+            </summary>
+            <param name="userVM">Objeto do PatientViewModel</param>
+            <returns>Retorna algumas informações sobre o usuário e o token a ser utilizado enquanto estiver utilizando este serviço</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.PatientController.Post(dotnet_test.Models.ViewModels.PatientViewModel)">
+            <summary>
+            Cadastra um paciente no sistema - Qualquer pessoa
+            </summary>
+            <param name="userVM">Objeto do PatientViewModel</param>
+            <returns>Cadastro realizado com sucesso</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.PatientController.GetAll">
+            <summary>
+            Busca dos pacientes cadastrados no sistema - Usuário do sistema
+            </summary>
+            <returns>Retorna todos os pacientes cadastrados no sistema</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.PatientController.Get(System.String,System.String)">
+            <summary>
+            Busca dos pacientes cadastrados no sistema - Usuário do sistema
+            </summary>
+            <param name="name">Nome do paciente</param>
+            <param name="cpf">Cpf do paciente</param>
+            <returns>Retorna todos os pacientes cadastrados no sistema de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.PatientController.Put(System.Int32,dotnet_test.Models.ViewModels.PatientViewModel)">
+            <summary>
+            Atualiza os dados dos pacientes cadastrados no sistema - Usuário do sistema
+            </summary>
+            <param name="id">Código do paciente cadastrado no sistema</param>
+            <param name="userVM">Objeto do PatientViewModel</param>
+            <returns>Atualiza dados do paciente, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.PatientController.Delete(System.Int32)">
+            <summary>
+            Atualiza o status do Paciente no hospital - Usuário do sistema
+            </summary>
+            <param name="id">Código do paciente registrado no sistema</param>
+            <returns>Atualiza dados do paciente, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.ScheduleTreatmentController.Post(dotnet_test.Models.ViewModels.ScheduleTreatmentViewModel)">
+            <summary>
+            Realiza um agendamento para um paciente no sistema - Paciente
+            </summary>
+            <param name="scheduleVM">Objeto do ScheduleTreatmentViewModel</param>
+            <returns>Cadastro realizado com sucesso</returns>
+            [Authorize(Roles = "Patient")]
+        </member>
+        <member name="M:dotnet_test.Controllers.ScheduleTreatmentController.GetAll">
+            <summary>
+            Busca dos agendamentos associados aos pacientes - Médico
+            </summary>
+            <returns>Retorna todos os agendamentos associados aos pacientes</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.ScheduleTreatmentController.GetAllByMedic(System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Busca dos agendamentos dos pacientes por parametros relacionados ao médico - Médico
+            </summary>
+            <param name="id">Id do médico cadastrado no sistema</param>
+            <param name="name">Nome do médico cadastrado no sistema</param>
+            <param name="cpf">Cpf do médico cadastrado no sistema</param>
+            <param name="crm">Crm do médico cadastrado no sistema</param>
+            <returns>Retorna todos os agendamentos associados aos pacientes</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.ScheduleTreatmentController.GetAllByPatient(System.Int32,System.String,System.String)">
+            <summary>
+            Busca dos agendamentos dos pacientes por parametros relacionados ao paciente - Médico
+            </summary>
+            <param name="id">Id do paciente cadastrado no sistema</param>
+            <param name="name">Nome do paciente cadastrado no sistema</param>
+            <param name="cpf">Cpf do paciente cadastrado no sistema</param>
+            <returns>Retorna todos os agendamentos associados aos pacientes</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.ScheduleTreatmentController.GetByDate(System.String,System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Busca dos agendamentos dos pacientes por parametros relacionados ao paciente/data - Paciente
+            </summary>
+            <param name="name">Nome do paciente cadastrado no sistema</param>
+            <param name="cpf">Cpf do paciente cadastrado no sistema</param>
+            <param name="dateTimeSchedule">Data agendada do paciente</param>
+            <returns>Retorna todos os agendamentos associados aos pacientes</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.ScheduleTreatmentController.Put(System.Int32,dotnet_test.Models.ViewModels.ScheduleTreatmentViewModel)">
+            <summary>
+            Atualiza os dados dos agendamentos dos pacientes - Paciente
+            </summary>
+            <param name="idTreatment">Código do tratamento feito no sistema</param>
+            <param name="scheduleVM">Objeto do ScheduleTreatmentViewModel</param>
+            <returns>Atualiza dados do agendamentos associados ao paciente, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.ScheduleTreatmentController.Delete(System.Int32)">
+            <summary>
+            Atualiza o status do agendamento ao paciente - Paciente
+            </summary>
+            <param name="id">Código do agendamento feito no sistema</param>
+            <returns>Atualiza dados dos agendamentos associados ao paciente, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.SystemUserController.Authenticate(dotnet_test.Models.ViewModels.SystemUserViewModel)">
+            <summary>
+            Autenticação de usuário como Usuário do sistema, utilizando cpf e senha - Qualquer pessoa
+            </summary>
+            <param name="userVM">Objeto do SystemUserViewModel</param>
+            <returns>Retorna algumas informações sobre o usuário e o token a ser utilizado enquanto estiver utilizando este serviço</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.SystemUserController.Post(dotnet_test.Models.ViewModels.SystemUserViewModel)">
+            <summary>
+            Cadastra um usuário do sistema no sistema - Usuário do sistema
+            </summary>
+            <param name="userVM">Objeto do SystemUserViewModel</param>
+            <returns>Cadastro realizado com sucesso</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.SystemUserController.GetAll">
+            <summary>
+            Busca dos usuários do sistema cadastrados no sistema - Usuário do sistema
+            </summary>
+            <returns>Retorna todos os usuários do sistema cadastrados no sistema</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.SystemUserController.Get(System.String,System.String)">
+            <summary>
+            Busca dos usuários do sistema cadastrados no sistema - Usuário do sistema
+            </summary>
+            <param name="name">Nome do usuário do sistema</param>
+            <param name="cpf">Cpf do usuário do sistema</param>
+            <returns>Retorna todos os usuários dos sistemas cadastrados no sistema de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.SystemUserController.Put(System.Int32,dotnet_test.Models.ViewModels.SystemUserViewModel)">
+            <summary>
+            Atualiza os dados dos usuários do sistema cadastrados no sistema - Usuário do sistema
+            </summary>
+            <param name="id">Código do usuário do sistema cadastrado no sistema</param>
+            <param name="userVM">Objeto do SystemUserViewModel</param>
+            <returns>Atualiza dados do usuário do sistema, de acordo com os parametros utilizados</returns>
+        </member>
+        <member name="M:dotnet_test.Controllers.SystemUserController.Delete(System.Int32)">
+            <summary>
+            Atualiza o status do usuário do sistema no hospital - Usuário do sistema
+            </summary>
+            <param name="id">Código do usuário do sistema registrado no sistema</param>
+            <returns>Atualiza dados do usuário do sistema, de acordo com os parametros utilizados</returns>
+        </member>
+    </members>
+</doc>
